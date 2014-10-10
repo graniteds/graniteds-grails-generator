@@ -1,0 +1,133 @@
+// Gdsflex Spring Security
+
+description = 'Gdsflex Gas3 Generator support'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'signing'
+
+group = 'org.graniteds.grails'
+version = granitedsGrailsVersion
+description = 'Gdsflex Gas3 Generator'
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+configurations {
+	deployerJars
+}
+
+dependencies {
+	compile 'org.graniteds:granite-generator-share:3.1.0.GA'
+	compile 'org.graniteds:granite-generator:3.1.0.GA'
+	compile 'org.grails:grails-core:2.4.3'
+	compile 'org.grails:grails-validation:2.4.3'
+}
+
+compileJava {
+	sourceCompatibility=1.6
+	targetCompatibility=1.6
+}
+
+jar {
+	baseName = 'granite-grails-generator'
+}
+
+javadoc {
+	title "${project.description} API Documentation"
+	
+	configure(options) {
+		version = true
+		author = true
+		use = true
+		windowTitle = "${project.description} API Documentation"
+		docTitle = "${project.description} API Documentation"
+	}
+}
+
+task sourcesJar(type: Jar, dependsOn: 'classes') {
+	baseName = 'granite-grails-generator'
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+	baseName = 'granite-grails-generator'
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	archives sourcesJar
+	archives javadocJar
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.12'
+}
+
+signing {
+	required {
+		gradle.taskGraph.hasTask('uploadArchives')
+	}
+	sign configurations.archives
+}
+
+install {
+	repositories {
+		mavenInstaller {
+			// Generated dependencies are not suitable for maven pom, remove everything for now
+			pom.whenConfigured { pom -> pom.dependencies.clear() }
+		}
+	}
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			beforeDeployment {
+				MavenDeployment deployment -> signing.signPom(deployment)
+			}
+			
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: sonatypeOssUserName, password: sonatypeOssPassword)
+			}
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: sonatypeOssUserName, password: sonatypeOssPassword)
+			}
+			
+			pom.project {
+				name 'Gdsflex Spring Security'
+				description project.description
+				url 'http://www.graniteds.org'
+				
+				scm {
+					url 'scm:git@github.com:graniteds/granite-grails-generator.git'
+					connection 'scm:git@github.com:graniteds/granite-grails-generator.git'
+					developerConnection 'scm:git@github.com:graniteds/granite-grails-generator.git'
+				}
+				
+				licenses {
+					license {
+						name 'Apache License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0'
+						distribution 'repo'
+					}
+				}
+				
+				developers {
+					developer {
+						id 'wdrai'
+						name 'William Drai'
+					}
+				}
+			}
+			
+			// Generated dependencies are not suitable for maven pom, remove everything for now
+			pom.whenConfigured { pom -> pom.dependencies.clear() }
+		}
+	}
+}

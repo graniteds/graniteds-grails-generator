@@ -9,9 +9,9 @@ import org.granite.generator.as3.reflect.JavaRemoteDestination;
 import org.granite.generator.as3.reflect.JavaTypeFactory;
 
 
-public class GrailsServiceClass extends JavaRemoteDestination {
+public class GrailsServiceBean extends JavaRemoteDestination {
 
-    public GrailsServiceClass(JavaTypeFactory provider, Class<?> type, URL url) {
+    public GrailsServiceBean(JavaTypeFactory provider, Class<?> type, URL url) {
     	super(provider, type, url);
     }
     

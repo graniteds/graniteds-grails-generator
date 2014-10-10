@@ -60,10 +60,10 @@ public class GrailsAs3GroovyTransformer extends JavaAs3GroovyTransformer {
 			Kind kind = getKind(clazz);
 			switch (kind) {
 			case ENTITY:
-	            javaType = new GrailsDomainClass(this, clazz, url);
+	            javaType = new GrailsDomainBean(this, clazz, url);
 	            break;
 			case REMOTE_DESTINATION:
-				javaType = new GrailsServiceClass(this, clazz, url);
+				javaType = new GrailsServiceBean(this, clazz, url);
 				break;
 	        default:
 	        	javaType = super.getJavaType(clazz);

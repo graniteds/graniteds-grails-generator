@@ -1,41 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_24"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/graniteds_builder"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/graniteds"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-bootstrap-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-core-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-crud-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-docs-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-gorm-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-osgi-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-resources-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-scripts-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-spring-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-test-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-web-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-webflow-1.3.7.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.aop-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.asm-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.aspects-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.beans-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.binding-2.0.8.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.context-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.context.support-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.core-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.expression-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.instrument-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.instrument.tomcat-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.jdbc-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.jms-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.js-2.0.8.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.orm-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.oxm-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.test-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.transaction-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.web-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/lib/org.springframework.webflow-2.0.8.RELEASE.jar"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/graniteds/granite-generator-share/3.1.0.GA/granite-generator-share-3.1.0.GA.jar" sourcepath="C:/Users/william/.m2/repository/org/graniteds/granite-generator-share/3.1.0.GA/granite-generator-share-3.1.0.GA-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/graniteds/granite-generator/3.1.0.GA/granite-generator-3.1.0.GA.jar" sourcepath="C:/Users/william/.m2/repository/org/graniteds/granite-generator/3.1.0.GA/granite-generator-3.1.0.GA-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-core/2.4.3/b4b62bed10a740d5ef642ab638757adb9c640923/grails-core-2.4.3.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-core/2.4.3/a9857da52d55bf5e69af0eadbd5f8fe439d193aa/grails-core-2.4.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-validation/2.4.3/a5927f6f57f6a2311d1636fb5531aedceb78bc5/grails-validation-2.4.3.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-validation/2.4.3/339ec85abcdff5fe338807f7661172b9128d345f/grails-validation-2.4.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-plugin-scaffolding/2.2.5/b8e11ede39314b2eb1bf56c633af3d1440c47800/grails-plugin-scaffolding-2.2.5.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-plugin-scaffolding/2.2.5/3bc79c083340dac899fc5c9367eca813afe77430/grails-plugin-scaffolding-2.2.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.5/jcl-over-slf4j-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/springframework/spring-core/4.0.6.RELEASE/spring-core-4.0.6.RELEASE.jar" sourcepath="C:/Users/william/.m2/repository/org/springframework/spring-core/4.0.6.RELEASE/spring-core-4.0.6.RELEASE-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/springframework/spring-beans/4.0.6.RELEASE/spring-beans-4.0.6.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/springframework/spring-tx/4.0.6.RELEASE/spring-tx-4.0.6.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/xalan/serializer/2.7.1/4b4b18df434451249bb65a63f2fb69e215a6a020/serializer-2.7.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-all/2.3.6/dfe5f424777f4579786ec2145fc43286fcda8195/groovy-all-2.3.6.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-all/2.3.6/daa3256e1f5887541d5ba47022ed4de19143ea2/groovy-all-2.3.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-spring/2.4.3/614cec0c660bc4250a1a25974e46a22518b9ca10/grails-spring-2.4.3.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-spring/2.4.3/7e9ae0d3845ee91814858f54cf741d270a779de8/grails-spring-2.4.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/com.googlecode.concurrentlinkedhashmap/concurrentlinkedhashmap-lru/1.4/d4b42ed76a166a81dbac613339eed3343be6bd2d/concurrentlinkedhashmap-lru-1.4.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/com.googlecode.concurrentlinkedhashmap/concurrentlinkedhashmap-lru/1.4/2e0ca1cdf642b815eb74a37b2f25edbedfd83471/concurrentlinkedhashmap-lru-1.4-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-bootstrap/2.4.3/bb0f8854790a838e4678ab1992096bb2bba68c68/grails-bootstrap-2.4.3.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-bootstrap/2.4.3/dffdd20556877ac4e267accb81104193adf4147b/grails-bootstrap-2.4.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.1-api/1.0.0.Final/hibernate-jpa-2.1-api-1.0.0.Final.jar" sourcepath="C:/Users/william/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.1-api/1.0.0.Final/hibernate-jpa-2.1-api-1.0.0.Final-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/springframework/spring-aop/4.0.6.RELEASE/spring-aop-4.0.6.RELEASE.jar" sourcepath="C:/Users/william/.m2/repository/org/springframework/spring-aop/4.0.6.RELEASE/spring-aop-4.0.6.RELEASE-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/springframework/spring-expression/4.0.6.RELEASE/spring-expression-4.0.6.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/springframework/spring-context/4.0.6.RELEASE/spring-context-4.0.6.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/aspectj/aspectjrt/1.8.1/aspectjrt-1.8.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/commons-validator/commons-validator/1.4.0/42fa1046955ade59f5354a1876cfc523cea33815/commons-validator-1.4.0.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/commons-validator/commons-validator/1.4.0/de47dafdf8eeb73b10198706c797b45b7fe0b51e/commons-validator-1.4.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar" sourcepath="C:/Users/william/.m2/repository/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails/2.2.5/e18936eaa3d8312d18b3c21ffe36458e869c14a9/grails-2.2.5.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails/2.2.5/56f9ba77c43a130a0f816392bfa1e6cef84811e0/grails-2.2.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-crud/2.2.5/514c9e0f69b93d1d4cfb288e1bfec4a637a8ee90/grails-crud-2.2.5.jar" sourcepath="C:/Users/william/.gradle/caches/modules-2/files-2.1/org.grails/grails-crud/2.2.5/786f84c3a9860dda893f77b5d91135e3f33f1289/grails-crud-2.2.5-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

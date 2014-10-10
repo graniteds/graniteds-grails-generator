@@ -68,9 +68,11 @@
     as3Imports.add("org.granite.tide.IPropertyHolder");
     as3Imports.add("org.granite.tide.IEntityManager");
 
-    if (jClass.hasIdentifiers())
+    if (jClass.hasIdentifiers()) {
         as3Imports.add("org.granite.collections.IPersistentCollection");
-
+		as3Imports.add("mx.data.utils.Managed");
+    }
+		
     if (jClass.hasUid() || generateDefaultUidMethods) {
         as3Imports.add("mx.core.IUID");
         if (generateDefaultUidMethods)
@@ -91,8 +93,8 @@
             as3Imports.add(jImport.as3Type.qualifiedName);
     }
     
-    jClass.hasMany.each {key,value->
-    	if(value.packageName != jClass.as3Type.packageName) {
+    jClass.hasMany.each { key,value ->
+    	if (value.packageName != jClass.as3Type.packageName) {
     		as3Imports.add(value.qualifiedName)
     	}
     }
@@ -145,20 +147,32 @@ package ${jClass.as3Type.packageName} {
         }
 
     %> {
+
+        public function ${jClass.as3Type.name}Base() {<%
+    if (jClass.hasSuperclass()) {%>
+            super();<%
+    }%>
+        }
 <%
 
     ///////////////////////////////////////////////////////////////////////////
     // Write Private Fields.
 
     if (jClass.hasIdentifiers()) {%>
-        protected var _em:IEntityManager = null;
-
+        [Transient]
+        meta var entityManager:IEntityManager = null;
+		
         private var __initialized:Boolean = true;
         private var __detachedState:String = null;
 <%
     }
-    for (jProperty in jClass.properties) {%>
+    for (jProperty in jClass.properties) {
+        if (jProperty instanceof org.granite.generator.as3.reflect.JavaMember) {%>
+        ${jProperty.access} var _${jProperty.name}:${jProperty.as3Type.name};<%
+        }
+        else {%>
         private var _${jProperty.name}:${jProperty.as3Type.name};<%
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -166,7 +180,7 @@ package ${jClass.as3Type.packageName} {
 
     if (jClass.hasIdentifiers()) {%>
 
-        <%= (jClass.hasSuperclass() ? "override " : "") %>meta function isInitialized(name:String = null):Boolean {
+        meta <%= (jClass.hasSuperclass() ? "override " : "") %>function isInitialized(name:String = null):Boolean {
             if (!name)
                 return __initialized;
 
@@ -177,28 +191,31 @@ package ${jClass.as3Type.packageName} {
             );
         }
 
-        [Transient]
-        <%= (jClass.hasSuperclass() ? "override " : "") %>public function meta_getEntityManager():IEntityManager {
-            return _em;
+        meta <%= (jClass.hasSuperclass() && jClass.superclass.hasIdentifiers() ? "override " : "") %>function defineProxy(id:${jClass.firstIdentifier.as3Type.name}):void {
+            __initialized = false;
+            _${jClass.firstIdentifier.name} = id;
         }
-        <%= (jClass.hasSuperclass() ? "override " : "") %>public function meta_setEntityManager(em:IEntityManager):void {
-        	_em = em;
-        }<%
+        meta <%= (jClass.hasSuperclass() && jClass.superclass.hasIdentifiers() ? "override " : "") %>function defineProxy3(obj:* = null):Boolean {
+            if (obj != null) {
+                var src:${jClass.as3Type.name}Base = ${jClass.as3Type.name}Base(obj);
+                if (src.__detachedState == null)
+                    return false;
+                _${jClass.firstIdentifier.name} = src._${jClass.firstIdentifier.name};
+                __detachedState = src.__detachedState;
+            }
+            __initialized = false;
+            return true;          
+        }
+        
+        [Bindable(event="dirtyChange")]
+		public function get meta_dirty():Boolean {
+			return Managed.getProperty(this, "meta_dirty", false);
+		}<%
     }
     else if (!jClass.hasSuperclass()) {%>
 
         meta function isInitialized(name:String = null):Boolean {
             return true;
-        }
-
-        [Transient]
-        public function meta_getEntityManager():IEntityManager {
-            return <%= (jClass.hasIdentifiers() ? "_em" : "null") %>;
-        }
-        public function meta_setEntityManager(em:IEntityManager):void {<%
-        	if (jClass.hasIdentifiers()) {%>
-            _em = em;<%
-            }%>
         }<%
     }
 
@@ -208,7 +225,7 @@ package ${jClass.as3Type.packageName} {
     if (jClass.hasMany) {%>    	
     
     	public static const meta_hasMany:Object = {
-			<% jClass.hasMany.eachWithIndex{me,i->if (i >0 ) {%>,
+			<% jClass.hasMany.eachWithIndex { me, i ->if (i > 0) {%>,
     		<%}%>${me.key}: ${me.value.name}<%}%>
 		}<%
     }
@@ -241,7 +258,7 @@ package ${jClass.as3Type.packageName} {
             if (jProperty.readable || jProperty.writable) {%>
 <%
                 if (jProperty.writable) {%>
-        public function set ${jProperty.name}(value:${jProperty.as3Type.qualifiedName}):void {
+        public <%= jProperty.writeOverride ? "override " : "" %>function set ${jProperty.name}<% if (jProperty.name == jProperty.as3Type.name) { %>_<% } %>(value:${jProperty.as3Type.name}):void {
             _${jProperty.name} = value;
         }<%
                 }
@@ -252,7 +269,7 @@ package ${jClass.as3Type.packageName} {
         [Version]<%
                     }
                     if (!jProperty.writable) {%>
-        [Bindable(event="unused")]<%
+        [Bindable(event="propertyChange")]<%
         			}
                     if (jClass.metaClass.hasProperty(jClass, 'clientConstraints') && jClass.clientConstraints[jProperty.name] != null) {
                     	for (cons in jClass.clientConstraints[jProperty.name]) {%>
@@ -260,7 +277,7 @@ package ${jClass.as3Type.packageName} {
         					cons.properties.eachWithIndex{ p, i -> if (i > 0) {%>, <%}%>${p[0]}="${p[1]}"<%}%>)]<%
         				}
                     }%>
-        public function get ${jProperty.name}():${jProperty.as3Type.name} {
+        public <%= jProperty.readOverride ? "override " : "" %>function get ${jProperty.name}<% if (jProperty.name == jProperty.as3Type.name) { %>_<% } %>():${jProperty.as3Type.name} {
             return _${jProperty.name};
         }<%
                 }
@@ -327,11 +344,11 @@ package ${jClass.as3Type.packageName} {
             if (jProperty.readable || jProperty.writable) {%>
 <%
                 if (jProperty.writable) {%>
-        public function set ${jProperty.name}(value:${jProperty.as3Type.name}):void {
+        public function set ${jProperty.name}<% if (jProperty.name == jProperty.as3Type.name) { %>_<% } %>(value:${jProperty.as3Type.name}):void {
         }<%
                 }
                 if (jProperty.readable) {%>
-        public function get ${jProperty.name}():${jProperty.as3Type.name} {
+        public function get ${jProperty.name}<% if (jProperty.name == jProperty.as3Type.name) { %>_<% } %>():${jProperty.as3Type.name} {
             return ${jProperty.as3Type.nullValue};
         }<%
                 }
@@ -342,7 +359,7 @@ package ${jClass.as3Type.packageName} {
     ///////////////////////////////////////////////////////////////////////////
     // Write Merge Implementation.%>
 
-        <%= (jClass.hasSuperclass() ? "override " : "") %>public function meta_merge(em:IEntityManager, obj:*):void {
+        meta <%= (jClass.hasSuperclass() ? "override " : "") %>function merge(em:IEntityManager, obj:*):void {
             var src:${jClass.as3Type.name}Base = ${jClass.as3Type.name}Base(obj);<%
 
     if (jClass.hasIdentifiers()) {%>
@@ -350,12 +367,12 @@ package ${jClass.as3Type.packageName} {
             __detachedState = src.__detachedState;<%
     }
     else if (jClass.hasSuperclass()) {%>
-            super.meta_merge(em, obj);<%
+            super.meta::merge(em, obj);<%
     }%>
             if (meta::isInitialized()) {<%
 
     if (jClass.hasSuperclass() && jClass.hasIdentifiers()) {%>
-                super.meta_merge(em, obj);<%
+                super.meta::merge(em, obj);<%
     }
 
     for (jProperty in jClass.properties) {
@@ -364,7 +381,7 @@ package ${jClass.as3Type.packageName} {
     		    _${jProperty.name} = src._${jProperty.name};<%
     	} 
     	else {%>
-               	em.meta_mergeExternal(src._${jProperty.name}, _${jProperty.name}, null, this, '${jProperty.name}', function setter(o:*):void{_${jProperty.name} = o as ${jProperty.as3Type.name}});<%
+               em.meta_mergeExternal(src._${jProperty.name}, _${jProperty.name}, null, this, '${jProperty.name}<% if (jProperty.name == jProperty.as3Type.name) { %>_<% } %>', function setter(o:*):void{_${jProperty.name} = o as ${jProperty.as3Type.name}}, ${jProperty.externalizedProperty});<%
         }
     }%>
             }<%
@@ -386,7 +403,7 @@ package ${jClass.as3Type.packageName} {
     ///////////////////////////////////////////////////////////////////////////
     // Write IExternalizable Implementation.%>
 
-        <%= (jClass.hasSuperclass() ? "override " : "") %>public function readExternal(input:IDataInput):void {<%
+        public <%= (jClass.hasSuperclass() ? "override " : "") %>function readExternal(input:IDataInput):void {<%
 
     if (jClass.hasIdentifiers()) {%>
             __initialized = input.readObject() as Boolean;
@@ -423,10 +440,12 @@ package ${jClass.as3Type.packageName} {
         if (jClass.hasIdClass()) {
             String idClassType = jClass.idClass.as3Type.name;
             %>
-                var id:${idClassType} = input.readObject() as ${idClassType};<%
+                var id:${idClassType} = input.readObject() as ${idClassType};
+                if (id) {<%
             for (jId in jClass.identifiers) {%>
-                _${jId.name} = id.${jId.name};<%
-            }
+                    _${jId.name} = id.${jId.name};<%
+            }%>
+            	}<%
         }
         else if (jClass.firstIdentifier.as3Type.isNumber()) {%>
                 _${jClass.firstIdentifier.name} = function(o:*):Number { return (o is Number ? o as Number : Number.NaN) } (input.readObject());<%
@@ -438,7 +457,7 @@ package ${jClass.as3Type.packageName} {
     }%>
         }
 
-        <%= (jClass.hasSuperclass() ? "override " : "") %>public function writeExternal(output:IDataOutput):void {<%
+        public <%= (jClass.hasSuperclass() ? "override " : "") %>function writeExternal(output:IDataOutput):void {<%
 
     if (jClass.hasIdentifiers()) {%>
             output.writeObject(__initialized);

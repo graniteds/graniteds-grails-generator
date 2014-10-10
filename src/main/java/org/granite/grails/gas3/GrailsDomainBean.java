@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -17,8 +18,8 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
+import org.codehaus.groovy.grails.commons.GrailsDomainClass;
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty;
-import org.codehaus.groovy.grails.scaffolding.DomainClassPropertyComparator;
 import org.codehaus.groovy.grails.validation.ConstrainedProperty;
 import org.codehaus.groovy.grails.validation.Constraint;
 import org.codehaus.groovy.grails.validation.MatchesConstraint;
@@ -26,14 +27,15 @@ import org.codehaus.groovy.grails.validation.MaxConstraint;
 import org.codehaus.groovy.grails.validation.MinConstraint;
 import org.codehaus.groovy.grails.validation.NullableConstraint;
 import org.codehaus.groovy.grails.validation.SizeConstraint;
-import org.granite.generator.as3.As3Type;
+import org.granite.generator.as3.ClientType;
 import org.granite.generator.as3.reflect.JavaConstraint;
 import org.granite.generator.as3.reflect.JavaEntityBean;
 import org.granite.generator.as3.reflect.JavaProperty;
 import org.granite.generator.as3.reflect.JavaTypeFactory;
+import org.springframework.util.Assert;
 
 
-public class GrailsDomainClass extends JavaEntityBean {
+public class GrailsDomainBean extends JavaEntityBean {
 	
 	private static final String[] META_CONSTRAINTS = { "inline", "inCreate", "inEdit" };
 
@@ -51,21 +53,21 @@ public class GrailsDomainClass extends JavaEntityBean {
 		EVENTS.add("afterLoad");
 	};
 	
-	private Map<String, As3Type> hasMany = null;
+	private Map<String, ClientType> hasMany = null;
 	private Map<String, Map<String, String>> constraints = null;
 	private Map<String, List<JavaConstraint>> clientConstraints = new HashMap<String, List<JavaConstraint>>();
 	private org.codehaus.groovy.grails.commons.GrailsDomainClass domainClass = null;
 
 
     @SuppressWarnings("unchecked")
-    public GrailsDomainClass(JavaTypeFactory provider, Class<?> type, URL url) {
+    public GrailsDomainBean(JavaTypeFactory provider, Class<?> type, URL url) {
         super(provider, type, url);
         
         domainClass = new DefaultGrailsDomainClass(type);
         
         Map<String, Class<?>> hasMany = domainClass.getAssociationMap();
     	if (hasMany != null && !hasMany.isEmpty()) {
-    		this.hasMany = new HashMap<String, As3Type>();
+    		this.hasMany = new HashMap<String, ClientType>();
         	for (Map.Entry<String, Class<?>> me : hasMany.entrySet()) {
         		this.hasMany.put(me.getKey(), getProvider().getAs3Type(me.getValue()));
         	}
@@ -172,6 +174,7 @@ public class GrailsDomainClass extends JavaEntityBean {
     @Override
 	protected SortedMap<String, JavaProperty> initProperties() {
     	SortedMap<String, JavaProperty> properties = super.initProperties();
+    	
     	// domainClass not ready at this time
         if (!type.getSuperclass().equals(GroovyObject.class) &&
             !type.getSuperclass().equals(Object.class) &&
@@ -180,6 +183,8 @@ public class GrailsDomainClass extends JavaEntityBean {
     		properties.remove("version");
     	}
         
+		properties.remove("errors");
+		
         for (String event : EVENTS)
         	properties.remove(event);
         
@@ -193,7 +198,7 @@ public class GrailsDomainClass extends JavaEntityBean {
         return super.hasIdentifiers();
     }
     
-    public Map<String, As3Type> getHasMany() {
+    public Map<String, ClientType> getHasMany() {
     	return hasMany;
     }
 
@@ -214,7 +219,7 @@ public class GrailsDomainClass extends JavaEntityBean {
 			list = new ArrayList<JavaConstraint>();
 			clientConstraints.put(propertyName, list);
 		}
-		list.add(new JavaConstraint(name, c));
+		list.add(new JavaConstraint("", name, c));
     }
 	
 	private static String escape(Object value) {
@@ -255,4 +260,57 @@ public class GrailsDomainClass extends JavaEntityBean {
 			value = ((String)value).replace(",", ",,");
 		return (String)value;
 	}
+
+
+	private static class DomainClassPropertyComparator implements Comparator<Object> {
+
+	    @SuppressWarnings("rawtypes")
+		private Map constrainedProperties;
+	    private GrailsDomainClass domainClass;
+
+	    public DomainClassPropertyComparator(GrailsDomainClass domainClass) {
+	        Assert.notNull(domainClass, "Argument 'domainClass' is required!");
+
+	        constrainedProperties = domainClass.getConstrainedProperties();
+	        this.domainClass = domainClass;
+	    }
+
+	    public int compare(Object o1, Object o2) {
+	        if (o1.equals(domainClass.getIdentifier())) {
+	            return -1;
+	        }
+	        if (o2.equals(domainClass.getIdentifier())) {
+	            return 1;
+	        }
+
+	        GrailsDomainClassProperty prop1 = (GrailsDomainClassProperty)o1;
+	        GrailsDomainClassProperty prop2 = (GrailsDomainClassProperty)o2;
+
+	        ConstrainedProperty cp1 = (ConstrainedProperty)constrainedProperties.get(prop1.getName());
+	        ConstrainedProperty cp2 = (ConstrainedProperty)constrainedProperties.get(prop2.getName());
+
+	        if (cp1 == null & cp2 == null) {
+	            return prop1.getName().compareTo(prop2.getName());
+	        }
+
+	        if (cp1 == null) {
+	            return 1;
+	        }
+
+	        if (cp2 == null) {
+	            return -1;
+	        }
+
+	        if (cp1.getOrder() > cp2.getOrder()) {
+	            return 1;
+	        }
+
+	        if (cp1.getOrder() < cp2.getOrder()) {
+	            return -1;
+	        }
+
+	        return 0;
+	    }
+	}
+
 }

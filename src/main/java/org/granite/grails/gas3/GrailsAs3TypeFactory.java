@@ -4,6 +4,7 @@ import java.sql.Blob;
 import java.sql.Clob;
 
 import org.granite.generator.as3.As3Type;
+import org.granite.generator.as3.ClientType;
 import org.granite.generator.as3.DefaultAs3TypeFactory;
 
 
@@ -13,7 +14,10 @@ public class GrailsAs3TypeFactory extends DefaultAs3TypeFactory {
     
 
 	@Override
-    public As3Type getAs3Type(Class<?> jType) {
+    public ClientType getAs3Type(Class<?> jType) {
+		if (jType.isAnnotation())
+			return null;
+		
 		As3Type type = getFromCache(jType);
 		
 		if (type == null) {
@@ -21,12 +25,12 @@ public class GrailsAs3TypeFactory extends DefaultAs3TypeFactory {
 				type = FILE_REFERENCE;
 			}
 			
-			if (type != null)
+			if (type != null) {
 				putInCache(jType, type);
-			else
-				type = super.getAs3Type(jType);
+				return type;
+			}
 		}
 		
-		return type;
+		return super.getAs3Type(jType);
 	}
 }
