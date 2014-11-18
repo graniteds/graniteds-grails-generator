@@ -21,8 +21,8 @@ configurations {
 }
 
 dependencies {
-	compile 'org.graniteds:granite-generator-share:3.1.0.GA'
-	compile 'org.graniteds:granite-generator:3.1.0.GA'
+	compile 'org.graniteds:granite-generator-share:3.1.1.GA'
+	compile 'org.graniteds:granite-generator:3.1.1.GA'
 	compile 'org.grails:grails-core:2.4.3'
 	compile 'org.grails:grails-validation:2.4.3'
 }
